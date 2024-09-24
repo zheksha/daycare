@@ -1,8 +1,10 @@
 import { Formik, Form } from 'formik'
-import { Button, Label, Input } from '../ui' // Assuming Input is your custom component
-import type { IStudents } from '@/types/types'
 import { useEffect, useState } from 'react'
-import { ComboBox } from './ComboBox' // Using your ComboBox component
+import { ComboBox } from './ComboBox'
+import type { IStudents } from '@/types/types'
+import { Label } from '../ui/label'
+import { Input } from '../ui/input'
+import { Button } from '../ui/button'
 
 const StudentsForm = () => {
   const [students, setStudents] = useState<IStudents>()
@@ -29,7 +31,7 @@ const StudentsForm = () => {
           lastName: '',
           parentEmail: '',
           age: 0,
-          enrolledClass: undefined, // Use undefined for the initial value of the dropdown
+          enrolledClass: '',
         }}
         onSubmit={onHandleSubmit}
       >
@@ -77,13 +79,8 @@ const StudentsForm = () => {
               className="mb-5"
             />
 
-            <Label htmlFor="enrolledClass">Enroll to class</Label>
-            <ComboBox
-              value={values.enrolledClass}
-              onChange={
-                (selectedValue) => setFieldValue('enrolledClass', selectedValue) // Update the field value in Formik
-              }
-            />
+            {/* <Label htmlFor="enrolledClass">Enroll to class</Label> */}
+            <ComboBox />
 
             <div className="mt-5">
               <Button type="submit">Submit</Button>
