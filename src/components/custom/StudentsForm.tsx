@@ -14,8 +14,7 @@ const StudentsForm = () => {
     { resetForm }: { resetForm: () => void }
   ) => {
     setStudents(values)
-    console.log('Submitted:', values)
-    resetForm() // Reset the form after submission
+    resetForm()
   }
 
   useEffect(() => {
@@ -31,7 +30,7 @@ const StudentsForm = () => {
           lastName: '',
           parentEmail: '',
           age: 0,
-          enrolledClass: '',
+          enrolledClass: undefined,
         }}
         onSubmit={onHandleSubmit}
       >
@@ -79,8 +78,15 @@ const StudentsForm = () => {
               className="mb-5"
             />
 
-            {/* <Label htmlFor="enrolledClass">Enroll to class</Label> */}
-            <ComboBox />
+            <Label htmlFor="enrolledClass">Enroll to class</Label>
+            <div>
+              <ComboBox
+                value={values.enrolledClass}
+                setValue={(selectedvalue) =>
+                  setFieldValue('enrolledClass', selectedvalue)
+                }
+              />
+            </div>
 
             <div className="mt-5">
               <Button type="submit">Submit</Button>
