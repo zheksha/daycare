@@ -5,6 +5,8 @@ import type { IStudents } from '@/types/types'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
+import { Badge } from '../ui/badge'
+import * as Yup from 'yup'
 
 const StudentsForm = () => {
   const [students, setStudents] = useState<IStudents>()
@@ -21,6 +23,22 @@ const StudentsForm = () => {
     console.log('Updated Students: ', students)
   }, [students])
 
+  const SignupSchema = Yup.object().shape({
+    firstName: Yup.string()
+      .matches(/^[A-Za-z]+$/, 'Numbers cannot be a name')
+      .min(2, 'Too Short!')
+      .max(15, 'Too Long!')
+      .required('Required'),
+    lastName: Yup.string()
+      .min(2, 'Too Short!')
+      .max(25, 'Too Long!')
+      .required('Required'),
+    parentEmail: Yup.string().email('Invalid email').required('Required'),
+    age: Yup.number()
+      .max(10, "Child's age exceeds daycare limitation")
+      .min(1, 'Too young.'),
+  })
+
   return (
     <div className="p-10">
       <h1>Enroll Student</h1>
@@ -33,8 +51,16 @@ const StudentsForm = () => {
           enrolledClass: undefined,
         }}
         onSubmit={onHandleSubmit}
+        validationSchema={SignupSchema}
       >
-        {({ values, handleChange, handleBlur, setFieldValue }) => (
+        {({
+          values,
+          handleChange,
+          handleBlur,
+          setFieldValue,
+          errors,
+          touched,
+        }) => (
           <Form>
             <Label htmlFor="firstName">First Name</Label>
             <Input
@@ -43,8 +69,13 @@ const StudentsForm = () => {
               value={values.firstName}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="mb-5"
+              className="mb-2"
             />
+            {errors.firstName && touched.firstName ? (
+              <Badge variant="destructive" className="block mb-5">
+                {errors.firstName}
+              </Badge>
+            ) : null}
 
             <Label htmlFor="lastName">Last Name</Label>
             <Input
@@ -53,8 +84,13 @@ const StudentsForm = () => {
               value={values.lastName}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="mb-5"
+              className="mb-2"
             />
+            {errors.lastName && touched.lastName ? (
+              <Badge variant="destructive" className="block mb-5">
+                {errors.lastName}
+              </Badge>
+            ) : null}
 
             <Label htmlFor="parentEmail">Email</Label>
             <Input
@@ -64,8 +100,13 @@ const StudentsForm = () => {
               value={values.parentEmail}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="mb-5"
+              className="mb-2"
             />
+            {errors.parentEmail && touched.parentEmail ? (
+              <Badge variant="destructive" className="block mb-5">
+                {errors.parentEmail}
+              </Badge>
+            ) : null}
 
             <Label htmlFor="age">Age</Label>
             <Input
@@ -75,8 +116,13 @@ const StudentsForm = () => {
               value={values.age}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="mb-5"
+              className="mb-2"
             />
+            {errors.age && touched.age ? (
+              <Badge variant="destructive" className="block mb-5">
+                {errors.age}
+              </Badge>
+            ) : null}
 
             <Label htmlFor="enrolledClass">Enroll to class</Label>
             <div>

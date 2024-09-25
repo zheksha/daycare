@@ -8,7 +8,7 @@ export enum DaycareClasses {
 }
 
 export interface IStudents {
-  firstName: string
+  firstName?: string
   lastName: string
   parentEmail: string
   age: number
