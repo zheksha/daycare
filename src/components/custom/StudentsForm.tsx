@@ -1,21 +1,27 @@
 import { Formik, Form } from 'formik'
 import { useEffect, useState } from 'react'
 import { ComboBox } from './ComboBox'
-import type { IStudents } from '@/types/types'
+import type { IStudent } from '@/types/types'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
 import * as Yup from 'yup'
+import { useAppDispatch } from '@/redux/store'
+import { addStudent } from '@/redux/studentsSlice'
+import { DatePicker } from './DatePicker'
+import { format } from 'date-fns'
 
 const StudentsForm = () => {
-  const [students, setStudents] = useState<IStudents>()
+  const [students, setStudents] = useState<IStudent[]>([])
+  const dispatch = useAppDispatch()
 
   const onHandleSubmit = (
-    values: IStudents,
+    values: IStudent,
     { resetForm }: { resetForm: () => void }
   ) => {
-    setStudents(values)
+    dispatch(addStudent(values))
+    setStudents([...students, values])
     resetForm()
   }
 
@@ -49,6 +55,7 @@ const StudentsForm = () => {
           parentEmail: '',
           age: 0,
           enrolledClass: undefined,
+          birthDate: undefined,
         }}
         onSubmit={onHandleSubmit}
         validationSchema={SignupSchema}
@@ -124,7 +131,17 @@ const StudentsForm = () => {
               </Badge>
             ) : null}
 
-            <Label htmlFor="enrolledClass">Enroll to class</Label>
+            <Label htmlFor="birthdate">Birth Date</Label>
+            <DatePicker
+              date={values.birthDate}
+              setDate={(selectedDate) =>
+                setFieldValue('birthDate', format(selectedDate, 'MM/dd/yyyy'))
+              }
+            />
+
+            <Label htmlFor="enrolledClass" className="mt-5">
+              Enroll to class
+            </Label>
             <div>
               <ComboBox
                 value={values.enrolledClass}

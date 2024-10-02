@@ -7,10 +7,15 @@ export enum DaycareClasses {
   ELEPHANTS = 'Elephants',
 }
 
-export interface IStudents {
+export interface IStudent {
   firstName?: string
   lastName: string
   parentEmail: string
   age: number
   enrolledClass?: DaycareClasses
+  birthDate?: Date
+}
+
+export interface IStudentSliceState {
+  students: IStudent[]
 }
