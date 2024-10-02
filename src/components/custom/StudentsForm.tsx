@@ -13,7 +13,7 @@ import { DatePicker } from './DatePicker'
 import { format } from 'date-fns'
 
 const StudentsForm = () => {
-  const [students, setStudents] = useState<IStudent[]>([])
+
   const dispatch = useAppDispatch()
 
   const onHandleSubmit = (
@@ -21,13 +21,9 @@ const StudentsForm = () => {
     { resetForm }: { resetForm: () => void }
   ) => {
     dispatch(addStudent(values))
-    setStudents([...students, values])
     resetForm()
   }
 
-  useEffect(() => {
-    console.log('Updated Students: ', students)
-  }, [students])
 
   const SignupSchema = Yup.object().shape({
     firstName: Yup.string()

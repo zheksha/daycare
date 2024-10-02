@@ -14,6 +14,7 @@ export interface IStudent {
   age: number
   enrolledClass?: DaycareClasses
   birthDate?: Date
+  pinCode?: number
 }
 
 export interface IStudentSliceState {

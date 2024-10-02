@@ -17,12 +17,18 @@ const initialState: IStudentSliceState = {
   ],
 }
 
+const generatePin = (birthDate?: Date) => {
+  const [month, day, year] = birthDate?.toString().split('/') || ''
+  return Number(`${month}${day}${year.slice(-2)}`)
+}
+
 export const studentsSlice = createSlice({
   name: 'students',
   initialState,
   reducers: {
     addStudent: (state, action: PayloadAction<IStudent>) => {
-      state.students.push(action.payload)
+      const pinCode = generatePin(action.payload.birthDate)
+      state.students.push({ ...action.payload, pinCode })
     },
   },
 })
