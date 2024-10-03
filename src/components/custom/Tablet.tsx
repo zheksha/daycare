@@ -1,14 +1,15 @@
-import * as React from 'react'
+import { useState } from 'react'
 
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp'
+import { Delete } from 'lucide-react'
 
 const Tablet = () => {
-  const [value, setValue] = React.useState('')
-  const [activeIndex, setActiveIndex] = React.useState(0)
+  const [value, setValue] = useState('')
+  const [activeIndex, setActiveIndex] = useState(0)
 
   // Handle input slot change
   const handleInputChange = (index, newValue) => {
@@ -21,7 +22,7 @@ const Tablet = () => {
   }
 
   // Handle number click
-  const handleNumberClick = (number) => {
+  const handleNumberClick = (number: number) => {
     if (activeIndex < 6) {
       handleInputChange(activeIndex, number.toString())
     }
@@ -65,20 +66,11 @@ const Tablet = () => {
         </InputOTP>
         <div
           onClick={handleClearLast} // Clear last input on click
-          className="font-medium border text-center hover:bg-slate-200 p-9 cursor-pointer col-span-3 mx-auto"
+          className="font-medium  px-3 border text-center items-center hover:bg-slate-200 flex  justify-center content-center cursor-pointer bg-slate-200"
         >
-          Clear Last
+          <Delete color="#27272a" />
         </div>
       </div>
-
-      <div className="text-center text-sm">
-        {value === '' ? (
-          <>Enter your one-time password.</>
-        ) : (
-          <>You entered: {value}</>
-        )}
-      </div>
-
       <div className="grid grid-cols-3 gap-0 ">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((number, index) => (
           <div
