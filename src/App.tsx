@@ -7,12 +7,10 @@ import { useAppSelector } from './redux/store'
 const App = () => {
   const students = useAppSelector((state) => state.studentsInfo.students)
 
-  console.log(students)
-
   return (
     <div className="p-10 flex">
-      <div className="w-full  p-8 h-screen border border-slate-400 rounded-lg mr-2 flex justify-center items-center">
-        <Tablet />
+      <div className="w-full h-screen flex justify-center items-center">
+        <Tablet students={students} />
       </div>
 
       {/* <div className="w-1/3 border border-slate-400 rounded-lg mr-2">

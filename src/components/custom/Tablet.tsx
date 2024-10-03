@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
   InputOTP,
@@ -6,10 +6,22 @@ import {
   InputOTPSlot,
 } from '@/components/ui/input-otp'
 import { Delete } from 'lucide-react'
+import { Status, type IStudent } from '@/types/types'
+import { useAppDispatch } from '@/redux/store'
+import { changeStatus } from '@/redux/studentsSlice'
+import { toast } from 'sonner'
 
-const Tablet = () => {
+interface ITabletProps {
+  students: IStudent[]
+}
+
+const Tablet = (props: ITabletProps) => {
+  const { students } = props
+
   const [value, setValue] = useState('')
   const [activeIndex, setActiveIndex] = useState(0)
+  const [selectedStudent, setSelectedStudent] = useState<IStudent>()
+  const dispatch = useAppDispatch()
 
   // Handle input slot change
   const handleInputChange = (index, newValue) => {
@@ -42,11 +54,58 @@ const Tablet = () => {
       otpArray[newActiveIndex] = '' // Clear the last filled slot
       setValue(otpArray.join(''))
       setActiveIndex(newActiveIndex) // Set focus to the cleared slot
+      setSelectedStudent(undefined)
+    }
+  }
+
+  useEffect(() => {
+    if (value?.length === 6) {
+      const filteredStudent = students.filter(
+        (student) => student.id === Number(value)
+      )
+      setSelectedStudent(filteredStudent[0])
+    }
+  }, [value, students])
+
+  const handleStatusChange = () => {
+    if (selectedStudent) {
+      dispatch(
+        changeStatus({
+          id: selectedStudent.id,
+          status:
+            selectedStudent.status === Status.DROPPED_OFF
+              ? Status.PICKED_UP
+              : Status.DROPPED_OFF,
+        })
+      )
+
+      toast.success('Action has been recorded', {
+        description: new Date().toLocaleString(),
+        position: 'top-center',
+      })
+
+      setSelectedStudent(undefined)
+      setValue('')
     }
   }
 
   return (
     <div className="space-y-2">
+      {selectedStudent?.firstName ? (
+        <div className="border flex justify-between items-center p-0 m-0">
+          <p className="p-3">{selectedStudent?.firstName}</p>
+          <div
+            className="border-l p-2 self-stretch text-center align-middle justify-center flex items-center bg-slate-200 cursor-pointer"
+            onClick={handleStatusChange}
+          >
+            {selectedStudent.status === Status.DROPPED_OFF
+              ? 'Pick Up'
+              : 'Drop Off'}
+          </div>
+        </div>
+      ) : (
+        <div></div>
+      )}
       <div className="flex">
         <InputOTP
           maxLength={6}
